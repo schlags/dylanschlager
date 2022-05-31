@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Superbowl Party</title>
+    <!-- Add some CSS to change client UI -->
+    <!-- Latest compiled and minified CSS -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+    body {
+        background-color: #e2e2e2;
+        }
+    label {
+        color: #00562b;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 20px;
+        }
+    div.static {
+        position: sticky;
+        }
+    /**
+    * Nested Image Method
+    * ===================
+    */
+
+    .zoom-img {
+    width: 90%;
+    overflow: hidden;
+    }
+
+    .zoom-img > img {  
+    object-fit: cover;
+        width: 100%;
+        height: 100%;
+    transition: all .3s ease-in-out;
+    }
+
+    .zoom-img:hover > img {
+    transform: scale(1.2);
+    }
+    </style>
+
+    <script>
+        // function validateForm() {
+        //     let x = document.forms["myForm"]["fName"].value;
+        //     let y = document.forms["myForm"]["lName"].value;
+        //     if (x == "" || y == "") {
+        //         alert("Both the first and last name must be filled out");
+        //         return false;
+        //     }
+        // }
+        // define the callAPI function that takes a first name and last name as parameters
+        var addNewAttendee = (firstName,lastName,brings)=>{
+            if (firstName == "" || lastName == "") {
+                alert("Please pass both your first and last name!");
+                return;
+            }
+            // instantiate a headers object
+            var myHeaders = new Headers();
+            // add content type header to object
+            myHeaders.append("Content-Type", "application/json");
+            // using built in JSON utility package turn object to string and store in a variable
+            var raw = JSON.stringify({"firstName":firstName,"lastName":lastName,"brings":brings});
+            // create a JSON object with parameters for API call and store in a variable
+            var requestOptions = {
+                method: 'POST',
+                headers: myHeaders,
+                body: raw,
+                redirect: 'follow'
+            };
+            // make API call with parameters and use promises to get response
+            fetch("https://gudzto2q16.execute-api.us-west-2.amazonaws.com/dev", requestOptions)
+            .then(response => response.text())
+            .then(result => alert(JSON.parse(result).body))
+            .catch(error => console.log('error', error));
+        }
+        function getHoursAgo(last) {
+            var today = new Date();
+            console.log('info', "last: "+last)
+            var lastJS = new Date(Number(last))
+            console.log('info', "Today: "+today)
+            console.log('info', "lastJS: "+lastJS)
+            var hours = Math.abs(today - lastJS) / 36e5;
+            console.log('info', hours);
+            var days = hours/24
+            var minutes = hours*60
+            var seconds = minutes*60
+            console.log('info', minutes+" minutes ago.")
+            if (minutes < 1) {
+                return parseInt(seconds)+" second(s) ago"
+            }
+            else if (minutes < 60) {
+                return parseInt(minutes)+" minute(s) ago";
+            }
+            else if (hours < 24) {
+                return parseInt(hours)+" hour(s) ago"
+            }
+            else {
+                return parseInt(days)+" day(s) ago"
+            }
+        }
+        function getAttendees() {
+            // instantiate a headers object
+            var myHeaders = new Headers();
+            myHeaders.append("Content-Type", "application/json");
+
+            // add content type header to object
+            // create a JSON object with parameters for API call and store in a variable
+            var requestOptions = {
+                method: 'GET',
+                headers: myHeaders,
+                redirect: 'follow'
+            };
+            // make API call with parameters and use promises to get response
+            var elem = document.getElementById("result");
+            fetch("https://gudzto2q16.execute-api.us-west-2.amazonaws.com/dev", requestOptions)
+                .then((response) => {
+                return response.json();
+            }).then(function (body) {
+                // This is the JSON from our response
+                // console.log(JSON.stringify(body['body'], null, '    '));
+                // var final = {};
+                // elem.innerHTML = JSON.stringify(body['body'], null, '    ');
+                var i = "";
+                var x = ""
+                var z = 0
+
+                for (i in body.body) {
+                    z += 1;
+                    // x += '<li class="list-group-item">'
+                    var registeredDate = body.body[i]['Signed Up Time']
+                    var differenceTime = getHoursAgo(registeredDate)
+                    x += '<div class="mt-4 p-5 bg-success text-white rounded">'
+                    x += "<b><h3>"+JSON.stringify(body.body[i]['ID'], null, '    ').replace(/^"|"$/g, '') + "</b></h3>";
+                    x += "<h5>"+JSON.stringify(body.body[i]['Bringing'], null, '    ').replace(/^"|"$/g, '')+"</h5>";
+                    x += "<p><i>Last updated: "+differenceTime+".</i></p>";
+                    x += '</div>'
+                }
+                nav = `
+                <nav class="navbar navbar-expand-sm navbar-dark bg-light sticky-top justify-content-center">
+                    <ul class="navbar-nav mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <h4>Current Amount Registered: <span class="badge bg-secondary">`+z+`</span></h4>
+                        </li>
+                    </ul>
+                    <!-- <a class="navbar-brand" href="#" onClick="document.location.reload(true)">Refresh List</a> -->
+                </nav>
+                `
+                x = nav+x
+                document.getElementById("demo").innerHTML = x;
+                var col = [];
+                for (var i = 0; i < body['body'].length; i++) {
+                    for (var key in body[i]) {
+                        if (col.indexOf(key) === -1) {
+                            col.push(key);
+                        }
+                    }
+                }
+            });
+        }
+        document.addEventListener("DOMContentLoaded", function(event) { 
+            var scrollpos = localStorage.getItem('scrollpos');
+            if (scrollpos) window.scrollTo(0, scrollpos);
+        });
+
+        window.onbeforeunload = function(e) {
+            localStorage.setItem('scrollpos', window.scrollY);
+        };
+    </script>
+</head>
+<body onLoad="getAttendees('#attendees')">
+    <center>
+    <div class="zoom-img">
+    <img src="https://phantom-marca.unidadeditorial.es/5142ed463e6573c51790798a698fb6a7/resize/1320/f/webp/assets/multimedia/imagenes/2022/01/03/16412253260507.jpg" class="img-responsive" class="img-thumbnail" width="80%">
+    </div>
+    <div class="container">
+    <form class="disabled form-inline" name="myForm">
+        <h3>Superbowl Party</h3><hr />
+        <button type="button" class="btn btn-secondary btn-md btn-block" onclick="window.open('myevents.ics')"><i class="fa fa-calendar"></i> Add to Calendar</button>
+
+        <table class="table table-condensed">
+        <tr>
+            <td class="active"><b>Address:</b> 2878 S Delaware St. Englewood, CO</td>
+            <td class="success"><b>Time:</b> 11:00 AM</td>
+        </tr>
+        </table>
+        <p class='lead'>This event has ended.</p>
+        <p>Please sign up and indicate if you're bringing anything! Even if you're not bringing something, please still submit your name so we know how many to expect.</p>
+        <li class="list-group-item rounded">
+        <div class="alert alert-secondary">
+            <strong>Registration form</strong>
+        </div>
+        <div class="form-group">
+            <label for="fName">First Name: </label>
+            <input type="text" class="form-control" id="fName" disabled required>
+        </div>
+        <br />
+        <div class="form-group">
+            <label for="lName">Last Name: </label>
+            <input type="text" class="form-control" id="lName" disabled required>
+        </div>
+        <br />
+        <div class="form-group">
+            <label for="brings">What can you bring?</label>
+            <input type="text" class="form-control" id="brings" disabled>
+        </div>
+        <br />
+        <!-- <table id="attendees" border="1">
+        </table> -->
+        <!-- set button onClick method to call function we defined passing input values as parameters -->
+        <button type="button" class="btn btn-primary btn-lg btn-block disabled" onclick="addNewAttendee(document.getElementById('fName').value,document.getElementById('lName').value,document.getElementById('brings').value)">Add yourself!</button>
+        <p><i>You can always update yourself by adding a new entry with the same name.</i></p>
+        </li>
+        <br /><br />
+        <ul class="list-group" id="demo">
+        </ul>
+        <br />
+        <nav class="navbar navbar-expand-sm navbar-dark bg-dark bottom justify-content-center">
+            <ul class="navbar-nav mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onClick="document.location.reload(true)" >Tap to refresh list.</a>
+                </li>
+            </ul>
+            <!-- <a class="navbar-brand" href="#" onClick="document.location.reload(true)">Refresh List</a> -->
+        </nav>
+        </div>
+        </div> 
+    </form>
+    </center>
+
+</body>
+</html>
