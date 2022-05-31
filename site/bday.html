@@ -3,164 +3,175 @@
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/fomantic-ui@2.8.8/dist/semantic.min.css">
     <script src="https://cdn.jsdelivr.net/npm/fomantic-ui@2.8.8/dist/semantic.min.js"></script>
-
     <head>
         <title>DylanSchlager.com | Birthday</title>
     </head>
     <body>
-        <div class="ui attached secondary segment">
-            <div class="ui segment" id="menu">
-                <div class="ui two column stackable grid">
-                    <div class="column">
-                            <h4 class="ui header">
-                                <i class="bottom right corner terminal icon"></i>
+        <div class="ui stackable padded grid">
+            <div class="row">
+                <div class="ui attached secondary segment">
+                    <div class="ui segment" id="menu">
+                        <div class="ui two column stackable grid">
+                            <div class="column">
+                                    <h4 class="ui header">
+                                        <i class="bottom right corner terminal icon"></i>
+                                        <div class="content">
+                                            DylanSchlager.com
+                                            <div class="sub header">
+                                                <p>Birthday Bar Crawl</p>
+                                            </div>
+                                        </div>
+                                    </h4>
+                            </div>
+                            <div class="column">
+                                <div class="ui pointing fluid three item menu">
+                                    <div class="item">
+                                        <div class="ui vertical animated button" tabindex="0" id="homeButton">
+                                            <div class="hidden content">Home</div>
+                                            <div class="visible content">
+                                            <i class="icon large home"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="active item">
+                                        <h4 class="ui header">Birthday</h4>
+                                    </div>
+                                    <div class="item">
+                                        <div class="ui vertical animated button" tabindex="0" id="superbowlButton">
+                                            <div class="hidden content">Superbowl</div>
+                                            <div class="visible content">
+                                            <i class="icon large football ball"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui segment" id="time">
+                        <div class="ui header">When:</div>
+                        <div class="ui button">
+                            Add to Calendar
+                        </div>
+                        <div class="ui large primary tag label">
+                            <i class="calendar icon"></i>
+                            Saturday June 25th, 2022
+                        </div>
+                    </div>
+
+                    <div class="ui segment" id="schedule">
+                        <div class="ui header">
+                            Schedule:
+                        </div>
+                        <div class="ui center aligned secondary segment">
+                        <div class="ui steps">
+                            <div class="step">
+                                <i class="calendar icon"></i>
                                 <div class="content">
-                                    DylanSchlager.com
-                                    <div class="sub header">
-                                        <p>Birthday Bar Crawl</p>
+                                    <div class="title">Something Brewing</div>
+                                    <div class="description">
+                                        <p>
+                                            <strong>11:00 AM</strong>
+                                        </p>
                                     </div>
                                 </div>
-                            </h4>
-                    </div>
-                    <div class="column">
-                        <div class="ui right floated buttons">
-                            <div class="ui vertical animated button" tabindex="0" id="homeButton">
-                                <div class="hidden content">Home</div>
-                                <div class="visible content">
-                                <i class="icon large home"></i>
-                                </div>
                             </div>
-                            <div class="ui vertical active button" tabindex="0" id="birthdayButton">
-                                <h4 class="ui header">Birthday</h4>
-                            </div>
-                            <div class="ui vertical animated button" tabindex="0" id="superbowlButton">
-                                <div class="hidden content">Superbowl</div>
-                                <div class="visible content">
-                                <i class="icon large football ball"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="ui segment" id="time">
-                <div class="ui header">When:</div>
-                <div class="ui button">
-                    Add to Calendar
-                </div>
-                <div class="ui large primary tag label">
-                    <i class="calendar icon"></i>
-                    Saturday June 25th, 2022
-                </div>
-            </div>
-
-            <div class="ui segment" id="schedule">
-                <div class="ui header">
-                    Schedule:
-                </div>
-                <div class="ui steps">
-                    <div class="step">
-                        <i class="calendar icon"></i>
-                        <div class="content">
-                            <div class="title">Something Brewing</div>
-                            <div class="description">
-                                <p>
-                                    <strong>11:00 AM</strong>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="step">
-                        <i class="calendar icon"></i>
-                        <div class="content">
-                            <div class="title">Mile High Spirits</div>
-                            <div class="description">
-                                <p>
-                                    <strong>12:00 PM</strong>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="ui segment" id="attendees">
-                <div class="ui header">
-                    Who's Coming:
-                </div>
-                <!-- Event RSVP modal -->
-                <div class="ui modal">
-                        <i class="close icon"></i>
-                        <div class="header">
-                          Join the Crawl
-                        </div>
-                        <div class="image content">
-                          <div class="ui medium image">
-                            <img src="images/sam.jpg">
-                          </div>
-                          <div class="description">
-                            <form class="ui form">
-                                <div class="inline fields">
-                                    <div class="field">
-                                        <label>First Name</label>
-                                        <input type="text" name="firstName" placeholder="Sam">
-                                    </div>
-                                    <div class="field">
-                                        <label>Last Name</label>
-                                        <input type="text" name="lastName" placeholder="Gayheart">
+                            <div class="step">
+                                <i class="calendar icon"></i>
+                                <div class="content">
+                                    <div class="title">Mile High Spirits</div>
+                                    <div class="description">
+                                        <p>
+                                            <strong>12:00 PM</strong>
+                                        </p>
                                     </div>
                                 </div>
-                            </form>
-                          </div>
+                            </div>
                         </div>
-                        <div class="actions">
-                          <div class="ui black deny button">
-                            Nope, never mind.
-                          </div>
-                          <div class="ui positive right labeled icon button">
-                            I'm in
-                            <i class="checkmark icon"></i>
-                          </div>
-                        </div>
-                </div>
-
-                <!-- Attendees list -->
-                <div class="ui center aligned segment">
-                    <div class="ui mini horizontal divided list">
-                        <div class="item">
-                        <img class="ui avatar image" src="images/sam.jpg">
-                        <div class="content">
-                            <div class="header">Helen</div>
-                        </div>
-                        </div>
-                        <div class="item">
-                        <img class="ui avatar image" src="images/sam.jpg">
-                        <div class="content">
-                            <div class="header">Christian</div>
-                        </div>
-                        </div>
-                        <div class="item">
-                        <img class="ui avatar image" src="images/sam.jpg">
-                        <div class="content">
-                            <div class="header">Daniel</div>
-                        </div>
+                    
                         </div>
                     </div>
-                </div>
 
-                <!-- Register button -->
-                <div class="ui fluid top icon labeled primary button" id="registerButton">
-                    <i class="user plus icon"></i>
-                    <div class="content">
-                        RSVP to the crawl
+                    <div class="ui segment" id="attendees">
+                        <div class="ui header">
+                            Who's Coming:
+                        </div>
+                        <!-- Event RSVP modal -->
+                        <div class="ui modal">
+                                <i class="close icon"></i>
+                                <div class="header">
+                                Join the Crawl
+                                </div>
+                                <div class="image content">
+                                <div class="ui medium image">
+                                    <img src="images/sam.jpg">
+                                </div>
+                                <div class="description">
+                                    <form class="ui form">
+                                        <div class="inline fields">
+                                            <div class="field">
+                                                <label>First Name</label>
+                                                <input type="text" name="firstName" placeholder="Sam">
+                                            </div>
+                                            <div class="field">
+                                                <label>Last Name</label>
+                                                <input type="text" name="lastName" placeholder="Gayheart">
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                </div>
+                                <div class="actions">
+                                <div class="ui black deny button">
+                                    Nope, never mind.
+                                </div>
+                                <div class="ui positive right labeled icon button">
+                                    I'm in
+                                    <i class="checkmark icon"></i>
+                                </div>
+                                </div>
+                        </div>
+
+                        <!-- Attendees list -->
+                        <div class="ui center aligned segment">
+                            <div class="ui mini horizontal divided list">
+                                <div class="item">
+                                <img class="ui avatar image" src="images/sam.jpg">
+                                <div class="content">
+                                    <div class="header">Helen</div>
+                                </div>
+                                </div>
+                                <div class="item">
+                                <img class="ui avatar image" src="images/sam.jpg">
+                                <div class="content">
+                                    <div class="header">Christian</div>
+                                </div>
+                                </div>
+                                <div class="item">
+                                <img class="ui avatar image" src="images/sam.jpg">
+                                <div class="content">
+                                    <div class="header">Daniel</div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Register button -->
+                        <div class="ui fluid top icon labeled primary button" id="registerButton">
+                            <i class="user plus icon"></i>
+                            <div class="content">
+                                RSVP to the crawl
+                            </div>
+                        </div>
                     </div>
+
                 </div>
             </div>
-
         </div>
     </body>
 <script>      
 
+    document.body.style.zoom="150%"
     $('.ui.modal')
     .modal()
     .modal({
