@@ -1,50 +1,46 @@
 <!-- Fomantic UI stuff -->
-<html>
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/fomantic-ui@2.8.8/dist/semantic.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/fomantic-ui@2.8.8/dist/semantic.min.js"></script>
+<html lang="en">
     <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <title>DylanSchlager.com | Birthday</title>
+
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/fomantic-ui@2.8.8/dist/semantic.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/fomantic-ui@2.8.8/dist/semantic.min.js"></script>
     </head>
     <body>
-        <div class="ui stackable padded grid">
+        <style>
+            div.scroll {
+                width: 80%;
+                height: 80%;
+                overflow-y: scroll;
+            }
+        </style>
+        <div class="ui mobile stackable padded grid" id="mainGrid">
             <div class="row">
                 <div class="ui attached secondary segment">
                     <div class="ui segment" id="menu">
-                        <div class="ui two column stackable grid">
+                        <div class="ui one column stackable grid">
                             <div class="column">
                                     <h4 class="ui header">
-                                        <i class="bottom right corner terminal icon"></i>
+                                        <div class="ui right floated animated button" tabindex="0" id="homeButton">
+                                            <div class="hidden content">Home</div>
+                                            <div class="visible content">
+                                            <i class="icon home"></i>
+                                            </div>
+                                        </div>
+                                        <i class="birthday cake icon"></i>
                                         <div class="content">
-                                            DylanSchlager.com
+                                            Dylan's 26th Birthday
                                             <div class="sub header">
-                                                <p>Birthday Bar Crawl</p>
+                                                <p>Bar Crawl</p>
                                             </div>
                                         </div>
                                     </h4>
                             </div>
                             <div class="column">
-                                <div class="ui pointing fluid three item menu">
-                                    <div class="item">
-                                        <div class="ui vertical animated button" tabindex="0" id="homeButton">
-                                            <div class="hidden content">Home</div>
-                                            <div class="visible content">
-                                            <i class="icon large home"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="active item">
-                                        <h4 class="ui header">Birthday</h4>
-                                    </div>
-                                    <div class="item">
-                                        <div class="ui vertical animated button" tabindex="0" id="superbowlButton">
-                                            <div class="hidden content">Superbowl</div>
-                                            <div class="visible content">
-                                            <i class="icon large football ball"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -55,7 +51,19 @@
                         </div>
                         <div class="ui large primary tag label">
                             <i class="calendar icon"></i>
-                            Saturday June 25th, 2022
+                            Saturday, June 25th
+                        </div>
+                    </div>
+
+                    <div class="ui sticky">
+                        <div class="ui basic segment">
+                            <!-- Register button -->
+                            <div class="ui fluid top icon labeled primary huge button" id="registerButton">
+                                <i class="user plus icon"></i>
+                                <div class="content">
+                                    RSVP to the Crawl
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -64,7 +72,7 @@
                             Schedule:
                         </div>
                         <div class="ui center aligned secondary segment">
-                        <div class="ui steps">
+                        <div class="ui steps scroll">
                             <div class="step">
                                 <i class="calendar icon"></i>
                                 <div class="content">
@@ -87,6 +95,94 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="step">
+                                <i class="calendar icon"></i>
+                                <div class="content">
+                                    <div class="title">Something Brewing</div>
+                                    <div class="description">
+                                        <p>
+                                            <strong>11:00 AM</strong>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="step">
+                                <i class="calendar icon"></i>
+                                <div class="content">
+                                    <div class="title">Something Brewing</div>
+                                    <div class="description">
+                                        <p>
+                                            <strong>11:00 AM</strong>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="step">
+                                <i class="calendar icon"></i>
+                                <div class="content">
+                                    <div class="title">Something Brewing</div>
+                                    <div class="description">
+                                        <p>
+                                            <strong>11:00 AM</strong>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="step">
+                                <i class="calendar icon"></i>
+                                <div class="content">
+                                    <div class="title">Something Brewing</div>
+                                    <div class="description">
+                                        <p>
+                                            <strong>11:00 AM</strong>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="step">
+                                <i class="calendar icon"></i>
+                                <div class="content">
+                                    <div class="title">Something Brewing</div>
+                                    <div class="description">
+                                        <p>
+                                            <strong>11:00 AM</strong>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="step">
+                                <i class="calendar icon"></i>
+                                <div class="content">
+                                    <div class="title">Something Brewing</div>
+                                    <div class="description">
+                                        <p>
+                                            <strong>11:00 AM</strong>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="step">
+                                <i class="calendar icon"></i>
+                                <div class="content">
+                                    <div class="title">Something Brewing</div>
+                                    <div class="description">
+                                        <p>
+                                            <strong>11:00 AM</strong>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="step">
+                                <i class="calendar icon"></i>
+                                <div class="content">
+                                    <div class="title">Something Brewing</div>
+                                    <div class="description">
+                                        <p>
+                                            <strong>11:00 AM</strong>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     
                         </div>
@@ -102,7 +198,7 @@
                                 <div class="header">
                                 Join the Crawl
                                 </div>
-                                <div class="image content">
+                                <div class="image center aligned content">
                                 <div class="ui medium image">
                                     <img src="images/sam.jpg">
                                 </div>
@@ -156,13 +252,7 @@
                             </div>
                         </div>
 
-                        <!-- Register button -->
-                        <div class="ui fluid top icon labeled primary button" id="registerButton">
-                            <i class="user plus icon"></i>
-                            <div class="content">
-                                RSVP to the crawl
-                            </div>
-                        </div>
+
                     </div>
 
                 </div>
@@ -171,7 +261,7 @@
     </body>
 <script>      
 
-    document.body.style.zoom="150%"
+
     $('.ui.modal')
     .modal()
     .modal({
@@ -181,6 +271,12 @@
 
     $('.ui.dropdown')
         .dropdown();
+
+    $('.ui.sticky')
+    .sticky({
+        context: '#mainGrid'
+    })
+    ;
 
     $('#homeButton').click(function() {
         window.location.href = "index.html";
