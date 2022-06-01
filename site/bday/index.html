@@ -136,13 +136,20 @@
                                 <div class="inline fields">
                                     <div class="field">
                                         <label>First Name</label>
-                                        <input type="text" name="firstName" id="fNameField" placeholder="Sam">
+                                        <input type="text" name="firstName" id="fNameField" placeholder="First">
                                     </div>
                                     <div class="field">
                                         <label>Last Name</label>
-                                        <input type="text" name="lastName" id="lNameField" placeholder="Gayheart">
+                                        <input type="text" name="lastName" id="lNameField" placeholder="Last">
+                                    </div>
+                                    <div class="field">
+                                        <div class="ui checkbox">
+                                            <input type="checkbox" id="agame" name="checkbox">
+                                            <label>I agree to bring my A-Game</label>
+                                        </div>
                                     </div>
                                 </div>
+                                <div class="ui error message"></div>
                             </form>
                         </div>
                         </div>
@@ -150,7 +157,7 @@
                         <div class="ui black deny button">
                             Nope, never mind.
                         </div>
-                        <div class="ui positive right labeled icon button" id="submitFormButton">
+                        <div class="ui positive approve right labeled icon button" id="submitFormButton">
                             I'm in
                             <i class="checkmark icon"></i>
                         </div>
@@ -167,9 +174,18 @@
 
 
     $('.ui.modal')
-    .modal()
     .modal({
-        blurring: true
+        blurring: true,
+        onDeny: function () {
+            window.alert('What the heck.');
+        },
+        onApprove: function () {
+            var validated = $('.ui.form').form('validate form');
+            if(!validated){
+                return false;
+                window.alert('Not chill.')
+            }
+        }
     })
     ;
 
@@ -211,6 +227,16 @@
     $(document).ready(function() {
         updateAttendees();
     });
+
+    $('.ui.form')
+    .form({
+        fields: {
+            fNameField     : 'empty',
+            lNameField   : 'empty',
+            agame    : 'checked'
+        }
+    })
+    ;
 
     function updateAttendees() {
         $.get('https://ylmovkieqe.execute-api.us-west-2.amazonaws.com/prod', function(data) {
@@ -263,12 +289,11 @@
 
     var addNewAttendee = (firstName,lastName)=>{
             if (firstName == "" || lastName == "") {
-                $('body').toast({
-                    position: 'top attached',
-                    title: 'Unable to add you to the list.',
-                    class: 'red',
-                    message: "Please pass both your first and last name!"
-                });
+                var validated = $('.ui.form').form('validate form');
+                if(!validated){
+                    return;
+                }
+                console.log("Form validated but still empty values");
                 return;
             }
             // instantiate a headers object
