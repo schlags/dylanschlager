@@ -239,7 +239,7 @@
     ;
 
     function updateAttendees() {
-        $.get('https://ylmovkieqe.execute-api.us-west-2.amazonaws.com/prod', function(data) {
+        $.get('https://api.dylanschlager.com/birthday', function(data) {
             console.log(data);
             if (data) {
                 $('#attendees').empty();
@@ -310,7 +310,7 @@
                 redirect: 'follow'
             };
             // make API call with parameters and use promises to get response
-            fetch("https://ylmovkieqe.execute-api.us-west-2.amazonaws.com/prod", requestOptions)
+            fetch("https://api.dylanschlager.com/birthday", requestOptions)
             .then(response => response.text())
             .then(result => {
                 $('body').toast({
