@@ -33,14 +33,14 @@ def lambda_handler(event, context):
     for_js = int(int(time.time())) * 1000
     print(f"for_js: {for_js}")
 # extract values from the event object we got from the Lambda service and store in a variable
+    if ("method" in event) and ("id" in event):
+        print('has method and id')
+        if event['method'] == "delete":
+            print(f'delete {event["id"]}')
+            return deletePerson(event['id'])
+        else:
+            print('Invalid method presented.')
     try:
-        if (event.has_key('method')) and (event.has_key('id')):
-            print('has method and id')
-            if event['method'] == "delete":
-                print(f'delete {event["id"]}')
-                return deletePerson(event['id'])
-            else:
-                print('Invalid method presented.')
         name = event['firstName'] +' '+ event['lastName']
     except:
         people = table.scan()['Items']
