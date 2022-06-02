@@ -223,6 +223,38 @@
                 })
             .catch(error => console.log('error', error));
     }
+    var deleteAttendee = (person)=>{
+           // instantiate a headers object
+           var myHeaders = new Headers();
+            // add content type header to object
+            myHeaders.append("Content-Type", "application/json");
+            // using built in JSON utility package turn object to string and store in a variable
+            var raw = JSON.stringify(
+                {
+                    "id":person,
+                    "method":"delete"
+                }
+            );
+            var requestOptions = {
+                method: 'POST',
+                headers: myHeaders,
+                body: raw,
+                redirect: 'follow'
+            };
+            // make API call with parameters and use promises to get response
+            fetch("https://api.dylanschlager.com/birthday/attendees", requestOptions)
+            .then(response => response.text())
+            .then(result => {
+                updateSchedule();
+                $('body').toast({
+                    position: 'top attached',
+                    title: 'Success',
+                    class: 'green',
+                    message: JSON.parse(result).body
+                });
+                })
+            .catch(error => console.log('error', error));
+    }
     // end delete button
 
     function updateSchedule() {
@@ -304,7 +336,7 @@
                 for (var person in data.body) {
                     console.log(person);
                     $('#attendees').append(
-                        '<div class="item">' +
+                        '<div class="attendee item">' +
                         '<div class="middle aligned content">' +
                         '<h3 class="header">' + data.body[person].id + '</h3>' +
                         '<div class="description">' +
@@ -314,6 +346,12 @@
                         '</div>');
                 }
             }
+            // Delete item based on text from title in item
+            $('.attendee.item').find('.ui.red.icon.button').click(function() {
+                var id = $(this).parent().parent().find('.header').text();
+                console.log(id); 
+                deleteAttendee(id);
+            });
         })
     }
 

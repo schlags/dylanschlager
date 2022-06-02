@@ -34,7 +34,7 @@ def lambda_handler(event, context):
 # extract values from the event object we got from the Lambda service and store in a variable
     try:
         name = event['firstName'] +' '+ event['lastName']
-        if event['method']:
+        if event.has_key('method'):
             if event['method'] == "delete":
                 return deletePerson(name)
             else:
