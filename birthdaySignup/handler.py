@@ -35,7 +35,9 @@ def lambda_handler(event, context):
 # extract values from the event object we got from the Lambda service and store in a variable
     try:
         if (event.has_key('method')) and (event.has_key('id')):
+            print('has method and id')
             if event['method'] == "delete":
+                print(f'delete {event["id"]}')
                 return deletePerson(event['id'])
             else:
                 print('Invalid method presented.')
