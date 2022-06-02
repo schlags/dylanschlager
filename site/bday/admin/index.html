@@ -173,6 +173,7 @@
             .catch(error => console.log('error', error));
     }
 
+    // delete button
     var deleteBar = (bar)=>{
             // instantiate a headers object
             var myHeaders = new Headers();
@@ -205,6 +206,7 @@
                 })
             .catch(error => console.log('error', error));
     }
+    // end delete button
 
     function updateSchedule() {
         $.get('https://api.dylanschlager.com/birthday/schedule', function(data) {
@@ -231,7 +233,8 @@
                             '<i class="map marker alternate icon"></i>'+data.body[i].address+
                         '</a>'+
                         // delete button
-                        '<br /><div class="ui tiny red icon button"><i class="trash icon"></i></div>'+
+                        '<br /><br /><div class="ui tiny red icon button"><i class="trash icon"></i></div>'+
+                        // end delete button
                         '</div>'+
                         '</div>');
                         
@@ -271,6 +274,7 @@
                 console.log(id); 
                 deleteBar(id);
             });
+            // end delete button
         })
     }
 
