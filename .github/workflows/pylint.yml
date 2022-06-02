@@ -22,3 +22,19 @@ jobs:
     - name: Analysing the code with pylint
       run: |
         pylint $(git ls-files '*.py')
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    # Zip the the python file
+    - name: Zip the python file
+      run: |
+        zip -r lambda.zip lambda/handler.py
+    - name: Update Birthday Lambda Function
+      run: |
+        aws lambda update-function-code \
+          --function-name  arn:aws:lambda:us-west-2:806320764941:function:insertBirthdayRecord \
+          --zip-file fileb://lambda.zip
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
+        AWS_DEFAULT_REGION: 'us-west-2'
