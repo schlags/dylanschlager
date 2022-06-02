@@ -17,10 +17,10 @@
                     <div class="ui one column stackable grid">
                         <div class="column">
                                 <h3 class="ui header">
-                                    <div class="ui right floated animated button" tabindex="0" id="homeButton">
-                                        <div class="hidden content">Home</div>
+                                    <div class="ui right floated animated button" tabindex="0" id="backButton">
+                                        <div class="hidden content">Back</div>
                                         <div class="visible content">
-                                        <i class="icon home"></i>
+                                        <i class="icon birthday cake"></i>
                                         </div>
                                     </div>
                                     <i class="birthday cake icon"></i>
@@ -190,6 +190,9 @@
             .catch(error => console.log('error', error));
     }
 
+    $('#backButton').click(function() {
+        window.location.href = "/bday";
+    });
     // delete button
     var deleteBar = (bar)=>{
             // instantiate a headers object
