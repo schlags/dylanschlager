@@ -27,14 +27,20 @@ jobs:
     steps:
     # Zip the the python file
     - uses: actions/checkout@v3
-    - name: Zip the python file
+    - name: Zip the birthdaySignup python file
       run: |
-        cd lambda && zip -r ../insertBirthdayRecord.zip handler.py && cd ../ && ls -ls *.zip
-    - name: Update Birthday Lambda Function
+        cd birthdaySignup && zip -r ../insertBirthdayRecord.zip handler.py && cd ../ && ls -ls *.zip
+    - name: Zip the birthdaySchedule python file
+      run: |
+        cd birthdaySchedule && zip -r ../birthdaySchedule.zip handler.py && cd ../ && ls -ls *.zip
+    - name: Update Birthday Lambda Functions
       run: |
         aws lambda update-function-code \
           --function-name  arn:aws:lambda:us-west-2:806320764941:function:insertBirthdayRecord \
-          --zip-file fileb://insertBirthdayRecord.zip
+          --zip-file fileb://insertBirthdayRecord.zip && \
+        aws lambda update-function-code \
+          --function-name  arn:aws:lambda:us-west-2:806320764941:function:barSchedule \
+          --zip-file fileb://birthdaySchedule.zip
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
