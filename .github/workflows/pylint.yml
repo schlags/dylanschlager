@@ -29,7 +29,7 @@ jobs:
     - uses: actions/checkout@v3
     - name: Zip the python file
       run: |
-        ls -la && zip -r lambda.zip lambda/lambda_function.py && ls -la insertBirthdayRecord.zip
+        ls -la && zip -r insertBirthdayRecord.zip lambda/lambda_function.py && ls -la insertBirthdayRecord.zip
     - name: Update Birthday Lambda Function
       run: |
         aws lambda update-function-code \
