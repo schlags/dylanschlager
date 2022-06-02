@@ -92,6 +92,22 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="column">
+                            <div class="ui segment" id="thoseComing">
+                                <div class="ui header">
+                                    <button class="circular ui right floated icon small button" id="refreshAttendees">
+                                        <i class="icon refresh"></i>
+                                    </button>
+                                    <div id="numberOfAttendees"></div>
+                                </div>
+            
+                                <!-- Attendees list -->
+                                <div class="ui center aligned segment">
+                                    <div class="ui divided relaxed list" id="attendees">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -99,6 +115,7 @@
     </body>
 <script>      
     updateSchedule();
+    updateAttendees();
     $('.ui.calendar')
     .calendar({
         type: 'time'
@@ -275,6 +292,28 @@
                 deleteBar(id);
             });
             // end delete button
+        })
+    }
+
+    function updateAttendees() {
+        $.get('https://api.dylanschlager.com/birthday/attendees', function(data) {
+            console.log(data);
+            if (data) {
+                $('#attendees').empty();
+                $('#numberOfAttendees').html('Amount Registered:<div class="ui blue inverted label">'+data.body.length+'</div>');
+                for (var person in data.body) {
+                    console.log(person);
+                    $('#attendees').append(
+                        '<div class="item">' +
+                        '<div class="middle aligned content">' +
+                        '<h3 class="header">' + data.body[person].id + '</h3>' +
+                        '<div class="description">' +
+                        '<div class="ui tiny red icon button"><i class="trash icon"></i></div>'+
+                        '</div>' +
+                        '</div>' +
+                        '</div>');
+                }
+            }
         })
     }
 

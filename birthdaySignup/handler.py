@@ -8,6 +8,23 @@ dynamodb = boto3.resource('dynamodb')
 # use the DynamoDB object to select our table
 table = dynamodb.Table('BirthdaySignup')
 
+def deletePerson(id):
+    table.delete_item(
+        Key={
+            'id': id
+        }
+    )
+    return {
+        'statusCode': 200,
+        'headers': {
+            'Access-Control-Allow-Headers': 'Content-Type',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
+        },
+        'body': json.dumps(f'Person deleted! {id}')
+    }
+
+
 # define the handler function that the Lambda service will use as an entry point
 def lambda_handler(event, context):
     print("Context: ", context)
@@ -17,6 +34,11 @@ def lambda_handler(event, context):
 # extract values from the event object we got from the Lambda service and store in a variable
     try:
         name = event['firstName'] +' '+ event['lastName']
+        if event['method']:
+            if event['method'] == "delete":
+                return deletePerson(name)
+            else:
+                print('Invalid method presented.')
     except:
         people = table.scan()['Items']
         try:
