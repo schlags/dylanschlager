@@ -252,12 +252,10 @@
 
     function updateAttendees() {
         $.get('https://api.dylanschlager.com/birthday/attendees', function(data) {
-            console.log(data);
             if (data) {
                 $('#attendees').empty();
                 $('#numberOfAttendees').html('Amount Registered:<div class="ui blue inverted label">'+data.body.length+'</div>');
                 for (var person in data.body) {
-                    console.log(person);
                     $('#attendees').append(
                         '<div class="item">' +
                         '<div class="middle aligned content">' +
@@ -338,12 +336,10 @@
 
     function updateSchedule() {
         $.get('https://api.dylanschlager.com/birthday/schedule', function(data) {
-            console.log(data);
             if (data) {
                 $('#scheduleList').empty();
                 var numbers = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"];
                 for (var i in data.body) {
-                    console.log(data.body[i]);
                     var number = +i + 1;
                     $('#scheduleList').append(
                         '<div class="step" id="'+encodeURIComponent(data.body[i].id)+'">'+
@@ -366,6 +362,11 @@
                 }
             }
             // Highlight green when current time matches start time of schedule item
+            var today = new Date();
+            // Get day of month
+            var currentDay = today.getDate();
+
+            console.log("Current Day of Month: ", currentDay);
             var currentTime = new Date();
             new Intl.DateTimeFormat('default',
             {
@@ -373,7 +374,13 @@
                 hour: 'numeric',
                 minute: 'numeric'
             }).format(currentTime);
-            var currentHour = currentTime.getHours();
+            var currentHour = 0;
+            if (currentDay != 25) {
+                console.log("Not the 25th, setting currentHour to 0 to prevent active highlighting");
+            } else {
+                console.log("It's the 25th, setting currentHour to ", currentTime.getHours());
+                currentHour = currentTime.getHours();
+            }
             //convert to 12 hour time
             if (currentHour > 12) {
                 currentHour = currentHour - 12;
@@ -382,12 +389,35 @@
 
 
             $('.step').each(function() {
+                if ($(this).find('.title').text() == "DINNER (break)") {
+                    //add light pink background color to css style of step
+                    $(this).css("background-color", "#FFECEC");
+                }
+                if ($(this).find('.title').text() == "Seven Grand") {
+                    // add low opacity background image to step
+                    $(this).css("background-image", "url('http://sevengrandbars.com/wp-content/uploads/2018/10/%E2%80%A2Edit-0369-1600x1067.jpg')");
+                    $(this).css("background-size", "cover");
+                    // add box shadow
+                    $(this).css("box-shadow", "inset 1000px 1000px 1000px rgba(255,255,255,.7)");
+                }
+                if ($(this).find('.title').text() == "Jackson's (Can't get kicked out again)") {
+                    // add low opacity background image to step
+                    $(this).css("background-image", "url('https://i.insider.com/5c09a75f0fefb30c4a52a413?width=1200&format=jpeg')");
+                    $(this).css("background-size", "cover");
+                    // add box shadow
+                    $(this).css("box-shadow", "inset 1000px 1000px 1000px rgba(255,255,255,.7)");
+                }
+                if ($(this).find('.title').text() == "Lustre Pearl") {
+                    // add low opacity background image to step
+                    $(this).css("background-image", "url('https://images.squarespace-cdn.com/content/v1/5984a64c37c5816a681b2b29/1511405787874-8WL1KV9FDWV2A0IIAYSH/lpd+banner.JPG?format=2500w')");
+                    $(this).css("background-size", "cover");
+                    // add box shadow
+                    $(this).css("box-shadow", "inset 1000px 1000px 1000px rgba(255,255,255,.8)");
+                }
                 var that = $(this)
                 var startTime = $(this).find('.description').find('.column').find('.ui.blue.inverted.basic.label').text();
-                console.log("Start Time "+startTime);
-                console.log("Current Time "+currentTimeString);
                     if (startTime.split(':')[0] == currentTimeString) {
-                        console.log("MATCHED!!!")
+                        console.log("TIME MATCHED, we are at: "+$(this).find('.title').text());
                         that.addClass('active');
                         $(this).find('.ui.circular.label').removeClass('disabled');
                         $(this).find('.ui.circular.label').addClass('green');
