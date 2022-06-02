@@ -28,7 +28,7 @@ jobs:
     # Zip the the python file
     - name: Zip the python file
       run: |
-        zip -r lambda.zip lambda/handler.py
+        zip -r lambda.zip lambda
     - name: Update Birthday Lambda Function
       run: |
         aws lambda update-function-code \
