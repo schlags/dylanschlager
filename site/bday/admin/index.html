@@ -1,0 +1,234 @@
+<!-- Fomantic UI stuff -->
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title>DylanSchlager.com | Birthday</title>
+
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/fomantic-ui@2.8.8/dist/semantic.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/fomantic-ui@2.8.8/dist/semantic.min.js"></script>
+    </head>
+    <body>
+        <div class="ui mobile stackable padded grid" id="mainGrid">
+            <div class="row">
+                <div class="ui attached secondary segment">
+                    <div class="ui one column stackable grid">
+                        <div class="column">
+                                <h3 class="ui header">
+                                    <div class="ui right floated animated button" tabindex="0" id="homeButton">
+                                        <div class="hidden content">Home</div>
+                                        <div class="visible content">
+                                        <i class="icon home"></i>
+                                        </div>
+                                    </div>
+                                    <i class="birthday cake icon"></i>
+                                    <div class="content">
+                                        Dylan's 26th Birthday
+                                        <div class="sub header">
+                                            <p>Bar Crawl</p>
+                                        </div>
+                                    </div>
+                                </h3>
+                        </div>
+                        <div class="column">
+                            <!-- Add to schedule form -->
+                            <div class="ui segment">
+                                <form class="ui form">
+                                    <div class="field">
+                                        <div class="ui left icon input">
+                                            <i class="cocktail icon"></i>
+                                            <input type="text" placeholder="Bar Name" id="barNameField">
+                                        </div>
+                                    </div>
+                                    <div class="field">
+                                        <div class="ui calendar">
+                                            <div class="ui input left icon">
+                                              <i class="time icon"></i>
+                                              <input type="text" id="startTimeField" placeholder="Start Time">
+                                            </div>
+                                          </div>
+                                    </div>
+                                    <div class="field">
+                                        <div class="ui calendar">
+                                            <div class="ui input left icon">
+                                              <i class="time icon"></i>
+                                              <input type="text" id="endTimeField" placeholder="End Time">
+                                            </div>
+                                          </div>
+                                    </div>
+                                    <div class="field">
+                                        <div class="ui left icon input">
+                                            <i class="cocktail icon"></i>
+                                            <input type="text" placeholder="Address" id="addressField">
+                                        </div>
+                                    </div>
+                                    <!-- submit -->
+                                    <div class="ui primary button" id="addToScheduleButton">Add to Schedule</div>
+                                    <div class="ui error message"></div>
+                                </form>
+                            </div>
+                            <!-- List Schedule -->
+                            <div class="ui segment">
+                                <div class="ui header">
+                                    Schedule:
+                                </div>
+                                <div class="ui center aligned basic segment">
+                                <div class="ui steps" id="scheduleList">
+                                    <div class="step">
+                                        <i class="calendar icon"></i>
+                                        <div class="content">
+                                            <div class="title">Coming Soon</div>
+                                            <div class="description">
+                                                <p>
+                                                    <strong>Starts at 1:00 PM</strong>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+<script>      
+    updateSchedule();
+    $('.ui.calendar')
+    .calendar({
+        type: 'time'
+    })
+    ;
+
+    $('.message .close')
+    .on('click', function() {
+        $(this)
+        .closest('.message')
+        .transition('fade')
+        ;
+    })
+    ;
+    $('.ui.form')
+    .form({
+        fields: {
+            barNameField     : 'empty',
+            startTimeField   : 'empty',
+            endTimeField   : 'empty',
+            address   : 'empty',
+        }
+    })
+    ;
+
+    $('#addToScheduleButton').click(
+        function() {
+            var validated = $('.ui.form').form('validate form');
+                if(!validated){
+                    return;
+                }
+            var barName = $('#barNameField').val();
+            var startTime = $('#startTimeField').val();
+            var endTime = $('#endTimeField').val();
+            var address = $('#addressField').val();
+            addNewSchedule(barName, startTime, endTime, address);
+        }       
+    );
+
+    var addNewSchedule = (bar,start,end,address)=>{
+            // instantiate a headers object
+            var myHeaders = new Headers();
+            // add content type header to object
+            myHeaders.append("Content-Type", "application/json");
+            // using built in JSON utility package turn object to string and store in a variable
+            var raw = JSON.stringify(
+                {
+                    "id":bar,
+                    "arriveTime": start,
+                    "leaveTime": end,
+                    "address": address
+                }
+            );
+            var requestOptions = {
+                method: 'POST',
+                headers: myHeaders,
+                body: raw,
+                redirect: 'follow'
+            };
+            // make API call with parameters and use promises to get response
+            fetch("https://api.dylanschlager.com/birthday/schedule", requestOptions)
+            .then(response => response.text())
+            .then(result => {
+                updateSchedule();
+                $('body').toast({
+                    position: 'top attached',
+                    title: 'Success',
+                    class: 'green',
+                    message: JSON.parse(result).body
+                });
+                })
+            .catch(error => console.log('error', error));
+    }
+
+    function updateSchedule() {
+        $.get('https://api.dylanschlager.com/birthday/schedule', function(data) {
+            console.log(data);
+            if (data) {
+                $('#scheduleList').empty();
+                var numbers = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"];
+                for (var i in data.body) {
+                    console.log(data.body[i]);
+                    var number = +i + 1;
+                    $('#scheduleList').append(
+                        '<div class="step" id="'+encodeURIComponent(data.body[i].id)+'">'+
+                        '<div class="ui disabled circular large label">'+number+'</div><br />'+
+                        '<div class="content">'+
+                        '<div class="title">'+data.body[i].id+'</div>'+
+                        '<div class="description">'+
+                            '<div class="column">'+
+                                '<div class="ui blue inverted basic label">'+data.body[i].arriveTime+'</div><strong>to</strong>'+
+                                '<div class="ui red inverted basic label">'+data.body[i].leaveTime+'</div>'+
+                            '</div>' +
+                        '</div>'+
+                        '<div class="ui horizontal divider"></div>'+
+                        '<a class="ui label" href="https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(data.body[i].address)+'">'+
+                            '<i class="map marker alternate icon"></i>'+data.body[i].address+
+                        '</a>'+
+                        '</div>'+
+                        '</div>');
+                        
+                }
+            }
+            // Highlight green when current time matches start time of schedule item
+            var currentTime = new Date();
+            new Intl.DateTimeFormat('default',
+            {
+                hour12: true,
+                hour: 'numeric',
+                minute: 'numeric'
+            }).format(currentTime);
+            var currentHour = currentTime.getHours();
+            var currentTimeString = currentHour;
+
+
+            $('.step').each(function() {
+                var that = $(this)
+                var startTime = $(this).find('.description').find('.column').find('.ui.blue.inverted.basic.label').text();
+                console.log("Start Time "+startTime);
+                console.log("Current Time "+currentTimeString);
+                    if (startTime.split(':')[0] == currentTimeString) {
+                        console.log("MATCHED!!!")
+                        that.addClass('active');
+                        $(this).find('.ui.circular.label').removeClass('disabled');
+                        $(this).find('.ui.circular.label').addClass('green');
+                    }
+            });
+        })
+    }
+
+</script>
+
+</html>
