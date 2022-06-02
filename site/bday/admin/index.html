@@ -173,6 +173,39 @@
             .catch(error => console.log('error', error));
     }
 
+    var deleteBar = (bar)=>{
+            // instantiate a headers object
+            var myHeaders = new Headers();
+            // add content type header to object
+            myHeaders.append("Content-Type", "application/json");
+            // using built in JSON utility package turn object to string and store in a variable
+            var raw = JSON.stringify(
+                {
+                    "id":bar,
+                    "method":"delete"
+                }
+            );
+            var requestOptions = {
+                method: 'POST',
+                headers: myHeaders,
+                body: raw,
+                redirect: 'follow'
+            };
+            // make API call with parameters and use promises to get response
+            fetch("https://api.dylanschlager.com/birthday/schedule", requestOptions)
+            .then(response => response.text())
+            .then(result => {
+                updateSchedule();
+                $('body').toast({
+                    position: 'top attached',
+                    title: 'Success',
+                    class: 'green',
+                    message: JSON.parse(result).body
+                });
+                })
+            .catch(error => console.log('error', error));
+    }
+
     function updateSchedule() {
         $.get('https://api.dylanschlager.com/birthday/schedule', function(data) {
             console.log(data);
@@ -197,6 +230,8 @@
                         '<a class="ui label" href="https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(data.body[i].address)+'">'+
                             '<i class="map marker alternate icon"></i>'+data.body[i].address+
                         '</a>'+
+                        // delete button
+                        '<br /><div class="ui tiny red icon button"><i class="trash icon"></i></div>'+
                         '</div>'+
                         '</div>');
                         
@@ -211,6 +246,10 @@
                 minute: 'numeric'
             }).format(currentTime);
             var currentHour = currentTime.getHours();
+            //convert to 12 hour time
+            if (currentHour > 12) {
+                currentHour = currentHour - 12;
+            }
             var currentTimeString = currentHour;
 
 
@@ -225,6 +264,12 @@
                         $(this).find('.ui.circular.label').removeClass('disabled');
                         $(this).find('.ui.circular.label').addClass('green');
                     }
+            });
+            // Delete item based on text from title in step
+            $('.step').find('.ui.red.icon.button').click(function() {
+                var id = $(this).parent().parent().find('.title').text();
+                console.log(id); 
+                deleteBar(id);
             });
         })
     }
