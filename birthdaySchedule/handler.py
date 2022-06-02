@@ -35,6 +35,7 @@ def lambda_handler(event, context):
         address = event['address']
     except:
         try:
+            bar = event['id']
             method = event['method']
             if method == "delete":
                 return deleteBar(bar)
