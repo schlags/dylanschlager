@@ -10,6 +10,7 @@ table = dynamodb.Table('BirthdaySignup')
 
 # define the handler function that the Lambda service will use as an entry point
 def lambda_handler(event, context):
+    print("Context: ", context)
     # store the current time in a human readable format in a variable
     for_js = int(int(time.time())) * 1000
     print(f"for_js: {for_js}")
@@ -30,7 +31,7 @@ def lambda_handler(event, context):
             'body': sorted_people
         }
 # write name and time to the DynamoDB table using the object we instantiated and save response in a variable
-    response = table.put_item(
+    table.put_item(
         Item={
             'id': name,
             'Signed Up Time':str(for_js)
@@ -43,7 +44,7 @@ def lambda_handler(event, context):
             'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
         },
-        'body': json.dumps(f'Welcome, {name}. See you at the barcrawl!')
+        'body': json.dumps(f'Welcome, {name}. See you at the bar crawl!')
     }
 
 
