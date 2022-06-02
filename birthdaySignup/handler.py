@@ -27,18 +27,19 @@ def deletePerson(id):
 
 # define the handler function that the Lambda service will use as an entry point
 def lambda_handler(event, context):
+    print("Event: ", event)
     print("Context: ", context)
     # store the current time in a human readable format in a variable
     for_js = int(int(time.time())) * 1000
     print(f"for_js: {for_js}")
 # extract values from the event object we got from the Lambda service and store in a variable
     try:
-        name = event['firstName'] +' '+ event['lastName']
-        if event.has_key('method'):
+        if (event.has_key('method')) and (event.has_key('id')):
             if event['method'] == "delete":
-                return deletePerson(name)
+                return deletePerson(event['id'])
             else:
                 print('Invalid method presented.')
+        name = event['firstName'] +' '+ event['lastName']
     except:
         people = table.scan()['Items']
         try:
