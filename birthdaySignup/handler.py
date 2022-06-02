@@ -71,9 +71,3 @@ def lambda_handler(event, context):
         },
         'body': json.dumps(f'Welcome, {name}. See you at the bar crawl!')
     }
-
-
-print(lambda_handler({
-    "firstName": "Dylan",
-    "lastName": "Schlager",
-    },""))
