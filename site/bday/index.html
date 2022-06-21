@@ -37,18 +37,21 @@
                     <div class="ui warning message">
                         <i class="close icon"></i>
                         <div class="header">
-                            Recent Update:
+                            <div class="ui label">June 21, 2022</div><br />Recent Update:
                             <div class="ui divider"></div>
                         </div>
                         <div class="content">
                             <p>
-                                Hey, friends!
+                                There will be some modifications coming soon to the schedule given 
+                                the turn out numbers. Might have to make sure that all of us can fit
+                                wherever we go.
                             </p>
                             <p>
-                                Sign up for the best bar crawl in the history of all time.
+                                There might be rain. Bring a poncho.
                             </p>
+
                             <p>
-                                Also, Sam Gayheart and I will be celebrating together now.
+                                ALSO - check out the game announcement.
                             </p>
                         </div>
                     </div>
@@ -73,6 +76,110 @@
                         <div class="ui large primary tag label">
                             <i class="calendar icon"></i>
                             Saturday, June 25th
+                        </div>
+                    </div>
+
+                    <div class="ui segment" id="game">
+                        <div class="ui header">The Game:</div>
+                        <!-- Make card 100% of container -->
+                        <div class="ui fluid card">  
+                            <div class="image">
+                                <div class="ui ribbon red label">NEW!</div>
+                              <img src="https://img.freepik.com/free-vector/four-aces-five-card-poker-hand-playing-cards-with-back-design-playing-card-isolated_168129-596.jpg?w=2000">
+                            </div>
+                            <div class="content">
+                              <a class="header">Degenerate Drinkers | Bar Crawl Poker</a>
+                              <div class="meta">
+                                <span class="date">Details and instructions:</span>
+                              </div>
+                              <div class="description">
+                                <h3 class="ui center aligned icon header">
+                                    <i class="ui dice icon"></i>
+                                    <div class="content">Upon arrival, you will be handed a card. 
+                                        <div class="sub header">
+                                            Build the best five card poker hand that you can by the end of the night.
+                                            <p>Karlie will act as dealer for this game.</p>
+                                        </div>
+                                    </div>
+                                </h3>
+                                <div class="ui secondary segment">
+                                    <h3 class="ui center aligned header">
+                                        <div class="content">Instructions:</div>
+                                    </h4>
+                                    <div class="ui divided list">
+                                        <div class="item">
+                                        <i class="plus square icon"></i>
+                                        <div class="content">
+                                            <div class="header">Getting More Cards</div>
+                                            <div class="description">At selected bars, you will be handed an additional card. 
+                                                <p>
+                                                    On the day of the crawl, watch the site to see what bars were selected.
+                                                </p>
+                                                <b>
+                                                    You, not Karlie, are responsible for getting your card at the bar.
+                                                </b>
+                                            </div>
+                                        </div>
+                                        </div>
+                                        <div class="item">
+                                            <i class="clipboard list icon"></i>
+                                            <div class="content">
+                                            <div class="header">Building Your Hand</div>
+                                            <div class="description">Just like 7 card poker, use the cards that you have been given to make the best poker hand possible.
+                                                <br />  
+                                                <b>A poker hand in this game is five cards.</b></div>
+                                            <!-- centered button to open modal that shows image -->
+                                            </div>
+                                            <div class="ui center aligned basic segment">
+                                                <div class="ui blue mini button" onclick="$('#pokerModal').modal('show')">
+                                                    <i class="info icon"></i>
+                                                    Poker Hands Guide for the Noobs
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="item">
+                                            <i class="glass cheers icon"></i>
+                                            <div class="content">
+                                            <div class="header">What if I miss a bar?</div>
+                                            <div class="description">
+                                                You can make up for lost opportunity to get the max of 7 cards by showing yourself taking a SHOT that is 70 proof or higher to Karlie.
+                                            </div>
+                                            </div>
+                                        </div>
+                                        <div class="item">
+                                            <i class="users icon"></i>
+                                            <div class="content">
+                                            <div class="header">Cards Available</div>
+                                            <div class="description">Since there are a lot of people attending, there will be a ton of decks in use.
+                                                <p>For this reason, same number cards of the same suit are possible. These types of hands have higher rank.</p>
+                                            </div>
+                                            </div>
+                                        </div>
+                                        <div class="item">
+                                            <i class="people arrows icon"></i>
+                                            <div class="content">
+                                            <div class="header">Trading With Other Degens</div>
+                                            <div class="description">It would be unrealistic to expect Karlie and I to enforce that there cannot be trading.
+                                                <p><b>So go nuts.</b></p>
+                                            </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                            <div class="extra content">
+                              <a>
+                                <i class="info icon"></i>
+                                You can only have a max of 7 cards to make your 5 card hand. Scout's honor that you don't cheat and get more. I'll be super sad.
+                                <p>
+                                    
+                                </p>
+                                <div class="ui tertiary center aligned segment">
+                                    Lost cards will NOT be replaced. You can convince someone else to give you one of their extras.
+                                </div>
+                              </a>
+                            </div>
                         </div>
                     </div>
                     <!-- List Schedule -->
@@ -172,6 +279,20 @@
                         </div>
                         </div>
                     </div>
+                    
+                    <!-- Poker modal -->
+                    <div class="ui modal" id="pokerModal">
+                        <i class="close icon"></i>
+                        <div class="header">
+                            Poker Hands
+                        </div>
+                        <div class="image center aligned content">
+                            <div class="ui medium image">
+                                <img src="https://www.telegraph.co.uk/content/dam/betting/Better-Collective/Poker-hands-sheet.jpg?imwidth=480">
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="ui top attached error message">
                         FYI - I'm actively developing this site, so it might be fucked up in spots.
                     </div>
