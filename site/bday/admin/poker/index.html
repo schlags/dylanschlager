@@ -1,0 +1,260 @@
+<!-- Site to track the poker hands of each attendee in the bar crawl -->
+
+<!-- Fomantic UI stuff -->
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title>DylanSchlager.com | Birthday Admin Panel</title>
+
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/fomantic-ui@2.8.8/dist/semantic.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/fomantic-ui@2.8.8/dist/semantic.min.js"></script>
+    </head>
+    <body>
+        <div class="ui mobile stackable padded grid" id="mainGrid">
+            <div class="row">
+                <div class="ui attached secondary segment">
+                    <div class="ui one column stackable grid">
+                        <div class="column">
+                                <h3 class="ui header">
+                                    <div class="ui right floated animated button" tabindex="0" id="backButton">
+                                        <div class="hidden content">Back</div>
+                                        <div class="visible content">
+                                        <i class="icon birthday cake"></i>
+                                        </div>
+                                    </div>
+                                    <i class="birthday cake icon"></i>
+                                    <div class="content">
+                                        Dylan's 26th Birthday
+                                        <div class="sub header">
+                                            <p>Bar Crawl</p>
+                                        </div>
+                                    </div>
+                                </h3>
+                        </div>
+                        <!-- warning message that if you are not Karlie, get the fuck out -->
+                        <div class="ui red fluid big label">
+                            <div class="header">
+                                If you are not Karlie, get the fuck out of here.
+                            </div>
+                        </div>
+
+                        <!-- Page header to display that Poker Hands should be tracked here -->
+                        <div class="column">
+                            <h3 class="ui header">
+                                <i class="dice icon"></i>
+                                <div class="content">
+                                    Track Poker Hands
+                                    <div class="sub header">
+                                        <p>Record all poker hands on this page</p>
+                                    </div>
+                                </div>
+                            </h3>
+                        </div>
+                        <div class="column">
+                            <div class="ui segment">
+                                <!-- form to record various poker hands possible per user -->
+                                <form class="ui form" id="pokerForm">
+                                    <div class="field">
+                                        <label>Player Name</label>
+                                        <!-- dropdown for player name, get players from api -->
+                                        <select class="ui search dropdown disabled" name="player" id="playerName">
+                                            <option value="">Select a Player...</option>
+                                        </select>
+                                    </div>
+                                    <div class="field">
+                                        <label>Poker Hand</label>
+                                        <!-- dropdown input type with all possible poker hands -->
+                                        <select class="ui dropdown" name="pokerHand" id="pokerHandInput">
+                                            <option value="">Select a Poker Hand</option>
+                                            <option value="1">High Card</option>
+                                            <option value="2">One Pair</option>
+                                            <option value="3">One Pair with SAME suit</option>
+                                            <option value="4">Two Pair</option>
+                                            <option value="5">Two Pair with SAME suit</option>
+                                            <option value="6">Three of a Kind</option>
+                                            <option value="7">Three of a Kind with SAME suit</option>
+                                            <option value="8">Straight</option>
+                                            <option value="9">Flush</option>
+                                            <option value="10">Flush with multiple SAME card</option>
+                                            <option value="11">Full House</option>
+                                            <option value="12">Full House same suit</option>
+                                            <option value="13">Four of a Kind</option>
+                                            <option value="14">Four of a Kind with SAME suit</option>
+                                            <option value="15">Straight Flush</option>
+                                            <option value="16">Royal Flush</option>
+                                            <option value="17">Royal Flush with SAME card</option>
+                                        </select>
+                                    </div>
+                                    <div class="ui error message"></div>
+                                    <!-- save hand -->
+                                    <div class="field">
+                                        <button class="ui button" id="saveHand">Save Hand</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="column">
+                            <!-- poker hand table -->
+                            <div class="ui segment">
+                                <table class="ui fluid table" id="pokerHandTable">
+                                    <thead>
+                                        <tr>
+                                            <th class="one wide">Best Hands at Top</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="pokerHandBody">
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- image of poker hand ranks -->
+                            <div class="ui center aligned segment">
+                                <div class="ui fluid image">
+                                    <img src="../../images/pokerhand-rank.png" alt="Poker Hand Ranks" id="pokerHandRanks">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+<script>
+    $('.message .close')
+    .on('click', function() {
+        $(this)
+        .closest('.message')
+        .transition('fade')
+        ;
+    })
+    ;
+    // Get all data from attendees api and sort by pokerHand then player name
+    function updatePokerHands() {
+        // clear body of poker hand table
+        $('#pokerHandBody').empty();
+        $.getJSON("https://api.dylanschlager.com/birthday/attendees", function(data) {
+            // sort data alphabetically by first name
+            data.body.sort(function(a, b) {
+                var nameA = a.id.toUpperCase(); // ignore upper and lowercase
+                var nameB = b.id.toUpperCase(); // ignore upper and lowercase
+                if (nameA < nameB) {
+                    return -1;
+                }
+                if (nameA > nameB) {
+                    return 1;
+                }
+                // names must be equal
+                return 0;
+            });
+            // sort by numeric value of pokerHand in descending order
+            data.body.sort(function(a, b) {
+                // if pokerHand doesn't exist, set to zero
+                if (a.pokerHand == null) {
+                    a.pokerHand = 0;
+                }
+                if (b.pokerHand == null) {
+                    b.pokerHand = 0;
+                }
+                return b.pokerHand - a.pokerHand;
+            });
+            // display data in table
+            $.each(data.body, function(key, value) {
+                // if a pokerHand exists in data
+                if (value.pokerHand) {
+                    // display data in table
+                    console.log("FOUND POKER HAND - "+value.id + ": " + value.pokerHand);
+                    $('#pokerHandBody').append('<tr><td>' + value.id + '</td><td>' + value.pokerHandSlug + '</td></tr>');
+                }
+            });
+        });
+    }
+
+    updatePokerHands();
+
+    $('#backButton').click(function() {
+        window.location.href = "/bday";
+    });
+
+    // disable behavior of form submit button
+    $('#pokerForm').submit(function(e) {
+        e.preventDefault();
+    });
+
+    // populate dropdown with players from api
+    $.getJSON("https://api.dylanschlager.com/birthday/attendees", function(data) {
+        // sort data alphabetically by first name
+        data.body.sort(function(a, b) {
+            var nameA = a.id.toUpperCase(); // ignore upper and lowercase
+            var nameB = b.id.toUpperCase(); // ignore upper and lowercase
+            if (nameA < nameB) {
+                return -1;
+            }
+            if (nameA > nameB) {
+                return 1;
+            }
+            // names must be equal
+            return 0;
+        });
+        $.each(data.body, function(key, value) {
+            $('#playerName').append($('<option>', {
+                value: value.id,
+                text: value.id
+            }));
+        });
+
+        $('#playerName').removeClass('disabled');
+    });
+
+    // ensure form is filled out before submitting
+    $('.ui.form')
+    .form({
+        fields: {
+            player     : 'empty',
+            pokerHand   : 'empty'
+        }
+    })
+    ;
+
+    // submit form to api
+    $('#saveHand').click(function() {
+        // ensure form is filled out before submitting
+        if ($('.ui.form').form('is valid')) {
+            // get form data
+            var player = $('#playerName').val();
+            var pokerHand = $('#pokerHandInput').val();
+            // get text from pokerHandInput for pokerHandSlug
+            var pokerHandSlug = $('#pokerHandInput option:selected').text();
+            // submit json data to api
+            $.ajax({
+                type: "POST",
+                url: "https://api.dylanschlager.com/birthday/attendees",
+                data: JSON.stringify({
+                    "player": player,
+                    "pokerHand": pokerHand,
+                    "pokerHandSlug": pokerHandSlug
+                }),
+                contentType: "application/json",
+                dataType: "json",
+                success: function(data) {
+                    // display success message
+                    $('.ui.error.message').html('<div class="ui success message"><i class="close icon"></i><div class="header">Success!</div><p>Poker Hand Saved</p></div>');
+                    // clear form
+                    $('#pokerForm').form('clear');
+                    updatePokerHands();
+                },
+                error: function(data) {
+                    // display error message
+                    $('.ui.error.message').html('<div class="ui error message"><i class="close icon"></i><div class="header">Error!</div><p>Poker Hand Not Saved</p></div>');
+                }
+            });
+        }
+        console.log("Poker hands updated!");
+    });
+    
+
+</script>
+
+</html>
