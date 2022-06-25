@@ -48,11 +48,30 @@ def lambda_handler(event, context):
         player = event['player']
         print(f'pokerHand: {pokerHand}')
         print(f'pokerHandSlug: {pokerHandSlug}')
+        # get record of table by id of player
+        response = table.get_item(
+            Key={
+                'id': player
+            }
+        )
+        print(f'Found Player: {response}')
+        # if no record found, return no content status code
+        if 'Item' not in response:
+            return {
+                'statusCode': 204,
+                'headers': {
+                    'Access-Control-Allow-Headers': 'Content-Type',
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
+                },
+                'body': json.dumps(f'No record found for {player}')
+            }
         table.put_item(
             Item={
                 'id': player,
                 'pokerHand': pokerHand,
-                'pokerHandSlug': pokerHandSlug
+                'pokerHandSlug': pokerHandSlug,
+                'Signed Up Time': response.get('Item').get('Signed Up Time')
             }
         )
         return {
