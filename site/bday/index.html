@@ -37,21 +37,19 @@
                     <div class="ui warning message">
                         <i class="close icon"></i>
                         <div class="header">
-                            <div class="ui label">June 21, 2022</div><br />Recent Update:
+                            <div class="ui label">June 25, 2022</div><br />Recent Update:
                             <div class="ui divider"></div>
                         </div>
                         <div class="content">
                             <p>
-                                There will be some modifications coming soon to the schedule given 
-                                the turn out numbers. Might have to make sure that all of us can fit
-                                wherever we go.
+                                It's HERE! Be prepared for rain.
                             </p>
                             <p>
-                                There might be rain. Bring a poncho.
+                                I might change a bar if weather sucks, so check the site regularly.
                             </p>
 
                             <p>
-                                ALSO - check out the game announcement.
+                                <b>Karlie will deal a card at all bars except Jackson's and the Dinner break.</b>
                             </p>
                         </div>
                     </div>
@@ -161,6 +159,15 @@
                                             <div class="header">Trading With Other Degens</div>
                                             <div class="description">It would be unrealistic to expect Karlie and I to enforce that there cannot be trading.
                                                 <p><b>So go nuts.</b></p>
+                                            </div>
+                                            </div>
+                                        </div>
+                                        <div class="item">
+                                            <i class="trophy icon"></i>
+                                            <div class="content">
+                                            <div class="header">Winning</div>
+                                            <div class="description">The winner(s) will get free Red Bull from Matt Bradley.
+                                                <p><b>And your drink of choice from Dylan at Jackson's.</b></p>
                                             </div>
                                             </div>
                                         </div>
@@ -331,6 +338,8 @@
     $('#homeButton').click(function() {
         window.location.href = "../index.html";
     });
+
+
     $('#registerButton').click(function() {
         $('.ui.modal').modal('show');
     });
@@ -452,6 +461,22 @@
                 })
             .catch(error => console.log('error', error));
         }
+    
+    function returnPlayingCard(barName) {
+        if (barName != "DINNER (break)" && barName != "Jackson's (Can't get kicked out again)") {
+            console.log("Card valid for bar: " + barName);
+            return  '<a class="ui image top right attached yellow label newCard">'+
+                    '<img src="images/stack-cards.png">'+
+                    'New Card Here!'+
+                    '</a>';
+        } else {
+            console.log("Card invalid for bar: " + barName);
+            return  '<a class="ui image top right attached red image label newCard">'+
+                    '<img src="images/no-gambling.png">'+
+                    'No Card Here!'+
+                    '</a>';
+        }
+    }
 
     function updateSchedule() {
         $.get('https://api.dylanschlager.com/birthday/schedule', function(data) {
@@ -462,6 +487,7 @@
                     var number = +i + 1;
                     $('#scheduleList').append(
                         '<div class="step" id="'+encodeURIComponent(data.body[i].id)+'">'+
+                        returnPlayingCard(data.body[i].id)+
                         '<div class="ui disabled circular large label">'+number+'</div><br />'+
                         '<div class="content">'+
                         '<div class="title">'+data.body[i].id+'</div>'+
@@ -475,8 +501,10 @@
                         '<a class="ui label" href="https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(data.body[i].address)+'">'+
                             '<i class="map marker alternate icon"></i>'+data.body[i].address+
                         '</a>'+
-                        '</div>'+
                         '</div>');
+                    // If the data.body[i].id isn't "Dinner" or "Jacksons", append label to step
+                    $('#scheduleList').append('</div>'); 
+                     
                         
                 }
             }
