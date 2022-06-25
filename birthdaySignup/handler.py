@@ -40,6 +40,31 @@ def lambda_handler(event, context):
             return deletePerson(event['id'])
         else:
             print('Invalid method presented.')
+
+    if ("pokerHand" in event) and ("pokerHandSlug" in event) and ("player" in event):
+        print('has pokerHand and pokerHandSlug')
+        pokerHand = event['pokerHand']
+        pokerHandSlug = event['pokerHandSlug']
+        player = event['player']
+        print(f'pokerHand: {pokerHand}')
+        print(f'pokerHandSlug: {pokerHandSlug}')
+        table.put_item(
+            Item={
+                'id': player,
+                'pokerHand': pokerHand,
+                'pokerHandSlug': pokerHandSlug
+            }
+        )
+        return {
+            'statusCode': 200,
+            'headers': {
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
+            },
+            'body': json.dumps(f'Person added! {for_js}')
+        }
+
     try:
         name = event['firstName'] +' '+ event['lastName']
     except:
