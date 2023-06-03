@@ -64,12 +64,11 @@ def record_and_pay(horse_id):
         table_name = 'bets'
 
         # Scan the table to retrieve all items
-        response = dynamodb.scan(TableName=table_name)
+        response = dynamodb.Table('bets').scan()
 
         # Delete each item in the table
-        with dynamodb.batch_writer(TableName=table_name) as batch:
-            for item in response['Items']:
-                batch.delete_item(Key=item)
+        for bet in response['Items']:
+            dynamodb.Table('bets').delete_item(Key={'bet_id': bet['bet_id'], 'player_id': bet['player_id']})
 
         # Print the result
         print(f"All items in '{table_name}' table have been deleted.")
