@@ -221,7 +221,7 @@
                 data = $.parseJSON(data);
                 console.log(data);
                 $('#horses').empty();
-                $('#numberOfAttendees').html('Total Races:<div class="ui blue inverted label">'+data.length+'</div>');
+                $('#numberOfAttendees').html('Total Horses in This Race:<div class="ui blue inverted label">'+data.length+'</div>');
                 for (var horse in data) {
                     $('#horses').append(
                         '<div class="item">' +
