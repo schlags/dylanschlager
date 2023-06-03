@@ -1,0 +1,339 @@
+<!-- Fomantic UI stuff -->
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title>Horse Racing Stuff</title>
+
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/fomantic-ui@2.8.8/dist/semantic.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/fomantic-ui@2.8.8/dist/semantic.min.js"></script>
+    </head>
+    <body>
+        <div class="ui mobile stackable padded grid" id="mainGrid">
+            <div class="row">
+                <div class="ui attached secondary segment">
+                    <div class="ui one column stackable grid">
+                        <div class="column">
+                                <h3 class="ui header">
+                                    <div class="ui right floated animated button" tabindex="0" id="homeButton">
+                                        <div class="hidden content">Home</div>
+                                        <div class="visible content">
+                                        <i class="icon home"></i>
+                                        </div>
+                                    </div>
+                                    <i class="horse icon"></i>
+                                    <div class="content">
+                                        Bet On Horses
+                                        <div class="sub header">
+                                            <p>It's fun</p>
+                                        </div>
+                                    </div>
+                                </h3>
+                        </div>
+                    </div>
+
+                    <!-- <div class="ui warning message">
+                        <i class="close icon"></i>
+                        <div class="header">
+                            <div class="ui label">June 25, 2022</div><br />Recent Update:
+                            <div class="ui divider"></div>
+                        </div>
+                        <div class="content">
+                            <p>
+                                It's HERE! Be prepared for rain.
+                            </p>
+                            <p>
+                                I might change a bar if weather sucks, so check the site regularly.
+                            </p>
+
+                            <p>
+                                <b>Karlie will deal a card at all bars except Jackson's and the Dinner break.</b>
+                            </p>
+                        </div>
+                    </div> -->
+
+                    <div class="ui sticky">
+                        <div class="ui basic segment">
+                            <!-- Register button -->
+                            <div class="ui fluid top icon labeled primary huge button" id="registerButton">
+                                <i class="user plus icon"></i>
+                                <div class="content">
+                                    Join the Betting
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ui segment" id="time">
+                        <div class="ui header">Bet:</div>
+                        <div class="ui button" onclick="window.location.href='./bets.html'">
+                            Place a New Bet
+                        </div>
+                        <div class="ui large primary tag label">
+                            <i class="info icon"></i>
+                            Please Sign Up
+                        </div>
+                    </div>
+
+                    <div class="ui segment" id="thoseComing">
+                        <div class="ui header">
+                            <button class="circular ui right floated icon small button" id="refreshAttendees">
+                                <i class="icon refresh"></i>
+                            </button>
+                            <div id="numberOfAttendees"></div>
+                        </div>
+
+                        <!-- Attendees list -->
+                        <div class="ui center aligned segment">
+                            <div class="ui divided relaxed list" id="attendees">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Event RSVP modal -->
+                    <div class="ui modal rsvp" id="rsvpModal">
+                        <i class="close icon"></i>
+                        <div class="header">
+                        Join the Crawl
+                        </div>
+                        <div class="image center aligned content">
+                        <div class="description">
+                            <form class="ui form register">
+                                <div class="inline fields">
+                                    <div class="field">
+                                        <label>Name</label>
+                                        <input type="text" name="firstName" id="fNameField" placeholder="Bob">
+                                    </div>
+                                    <div class="field">
+                                        <div class="ui checkbox">
+                                            <input type="checkbox" id="agame" name="checkbox">
+                                            <label>I agree to only bet under this name</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ui error message"></div>
+                            </form>
+                        </div>
+                        </div>
+                        <div class="actions">
+                        <div class="ui black deny button">
+                            Nope, never mind.
+                        </div>
+                        <div class="ui positive approve right labeled icon button" id="submitFormButton">
+                            I'm in
+                            <i class="checkmark icon"></i>
+                        </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Poker modal -->
+                    <div class="ui modal" id="newBetModal">
+                        <i class="close icon"></i>
+                        <div class="header">
+                            Place a New Bet
+                        </div>
+                        <div class="description">
+                            <form class="ui form">
+                                <div class="inline fields">
+                                    <div class="field">
+                                        <label>Name</label>
+                                        <input type="text" name="firstName" id="fNameField" placeholder="Bob">
+                                    </div>
+                                    <div class="field">
+                                        <label>Horse to Bet</label>
+                                        <input type="text" name="firstName" id="fNameField" placeholder="Bob">
+                                    </div>
+                                    <div class="field">
+                                        <label>Cash to Wager</label>
+                                        <input type="text" name="firstName" id="fNameField" placeholder="Bob">
+                                    </div>
+                                </div>
+                                <div class="ui error message"></div>
+                            </form>
+                        </div>
+                        
+                    </div>
+
+                    <div class="ui top attached error message">
+                        FYI - I'm actively developing this site, so it might be messed up in spots.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+<script>      
+    var baseURL = "https://6g125mlu01.execute-api.us-east-1.amazonaws.com/prod";
+
+
+    $('.ui.modal')
+    .modal({
+        blurring: true,
+        onDeny: function () {
+            // window.alert('What the heck.');
+        },
+        onApprove: function () {
+            var validated = $('.ui.form').form('validate form');
+            if(!validated){
+                return false;
+                // window.alert('Not chill.')
+            }
+        }
+    })
+    ;
+
+    $('.ui.dropdown')
+        .dropdown();
+
+    $('.ui.sticky')
+    .sticky({
+        context: '#mainGrid'
+    })
+    ;
+
+    $('#homeButton').click(function() {
+        window.location.href = "./index.html";
+    });
+
+
+    $('#registerButton').click(function() {
+        $('#rsvpModal').modal('show');
+    });
+
+    $('#newBetButton').click(function() {
+        $('#newBetModal').modal('show');
+    });
+    
+
+    $('#refreshAttendees').click(function() {
+        $(".icon.refresh").addClass("loading");
+        updateAttendees();
+        return new Promise(resolve => {
+            setTimeout(() => {
+                $(".icon.refresh").removeClass("loading");
+                resolve();
+            }, 1000);
+        });
+    })
+    $('.message .close')
+    .on('click', function() {
+        $(this)
+        .closest('.message')
+        .transition('fade')
+        ;
+    })
+    ;
+
+    $(document).ready(function() {
+        updateAttendees();
+    });
+
+    $('.ui.form.register')
+    .form({
+        fields: {
+            fNameField     : 'empty',
+            lNameField   : 'empty',
+            agame    : 'checked'
+        }
+    })
+    ;
+
+    function updateAttendees() {
+        $.get(baseURL+'/players', function(data) {
+            if (data) {
+                data = $.parseJSON(data);
+                $('#attendees').empty();
+                $('#numberOfAttendees').html('Score Board:<div class="ui blue inverted label">'+data.length+'</div>');
+                var winner = true;
+                for (var person in data) {
+                    $('#attendees').append(
+                        '<div class="item">' +
+                        '<div class="middle aligned content">' +
+                        '<div class="header">' + data[person].player_id + '</div>' +
+                        '<div class="description">' +
+                        (winner ? '<i class="yellow medal icon"></i>' : '') + 
+                        '<div class="ui green icon label"><i class="icon money"></i> ' + data[person].balance + '</div>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>');
+                    winner = false;
+                }
+            }
+        })
+    }
+
+    function placeBet(horse_id, player_id, amount_wagered) {
+    const url = baseURL+'/bets';
+    const data = {
+        horse_id: horse_id,
+        player_id: player_id,
+        amount_wagered: amount_wagered
+    };
+    const options = {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    };
+    fetch(url, options)
+        .then(response => {
+        if (response.ok) {
+            console.log('Bet placed successfully');
+        } else {
+            console.error('Failed to place bet');
+        }
+        })
+        .catch(error => {
+        console.error('Error placing bet:', error);
+        });
+    }
+
+
+    $('#submitFormButton').click(function() {
+        var fName = $('#fNameField').val();
+        addNewAttendee(fName);
+    });
+
+    var addNewAttendee = (firstName)=>{
+            if (firstName == "") {
+                var validated = $('.ui.form').form('validate form');
+                if(!validated){
+                    return;
+                }
+                console.log("Form validated but still empty values");
+                return;
+            }
+            // instantiate a headers object
+            var myHeaders = new Headers();
+            // add content type header to object
+            myHeaders.append("Content-Type", "application/json");
+            // using built in JSON utility package turn object to string and store in a variable
+            var raw = JSON.stringify({"name":firstName});
+            // create a JSON object with parameters for API call and store in a variable
+            var requestOptions = {
+                method: 'POST',
+                headers: myHeaders,
+                body: raw,
+                redirect: 'follow',
+                mode: 'no-cors'
+            };
+            // make API call with parameters and use promises to get response
+            fetch(baseURL+"/players", requestOptions)
+                .then(response => response.text())
+                .then(result => {
+                    $('body').toast({
+                        position: 'top attached',
+                        title: 'Success',
+                        class: 'green',
+                        message: result // modified line
+                    });
+                    updateAttendees();
+                    // Add a cookie called "player_id" with the value of the player_id returned from the API
+                    $.cookie("player_id", result);
+                })
+                .catch(error => console.log('error', error));
+        }
+</script>
+
+</html>

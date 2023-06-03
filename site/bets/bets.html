@@ -1,0 +1,295 @@
+<!-- Fomantic UI stuff -->
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title>Horse Racing Stuff | Bets</title>
+
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/fomantic-ui@2.8.8/dist/semantic.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/fomantic-ui@2.8.8/dist/semantic.min.js"></script>
+
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.css" />
+  
+        <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.js"></script>
+
+    </head>
+    <body>
+        <div class="ui modal" id="placeBetModal">
+            <div class="ui inverted segment">
+                <div class="ui inverted form">
+                  <div class="three fields">
+                    <div class="ui large green label">
+                        <div class="detail horseOdds"></div>
+                    </div>
+                    <div class="field">
+                      <label>Horse Name</label>
+                      <input placeholder="Horse Name" type="text" id="horseIDField">
+                    </div>
+                    <div class="field">
+                      <label>Your Name</label>
+                      <input placeholder="Your Name" type="text" id="playerIDField">
+                    </div>
+                    <div class="field">
+                        <label>Amount to Wager</label>
+                        <input placeholder="Your Name" type="text" id="amountWageredField">
+                      </div>
+                  </div>
+                  <div class="inline field">
+                    <div class="ui checkbox">
+                      <input type="checkbox" tabindex="0" class="hidden">
+                      <label>I agree that this is my name</label>
+                    </div>
+                  </div>
+                  <div class="ui submit button" id="submitBet">Submit</div>
+                </div>
+              </div>
+        </div>
+        <div class="ui mobile stackable padded grid" id="mainGrid">
+            <div class="row">
+                <div class="ui attached secondary segment">
+                    <div class="ui one column stackable grid">
+                        <div class="column">
+                                <h3 class="ui header">
+                                    <div class="ui right floated animated button" tabindex="0" id="homeButton">
+                                        <div class="hidden content">Home</div>
+                                        <div class="visible content">
+                                        <i class="icon home"></i>
+                                        </div>
+                                    </div>
+                                    <i class="horse icon"></i>
+                                    <div class="content">
+                                        Bets
+                                        <div class="sub header betPlacedSpot">
+                                            <p>Place a Bet</p>
+                                        </div>
+                                    </div>
+                                </h3>
+                        </div>
+                    </div>
+
+                    <div class="ui segment" id="thoseComing">
+                        <div class="ui header">
+                            <button class="circular ui right floated icon small button" id="refreshAttendees">
+                                <i class="icon refresh"></i>
+                            </button>
+                            <div id="numberOfAttendees"></div>
+                        </div>
+
+                        <!-- Horses list -->
+                        <div class="ui center aligned segment">
+                            <div class="ui divided relaxed list" id="horses">
+                            </div>
+                        </div>
+
+                        <!-- Divider -->
+                        <div class="ui horizontal divider">
+                            Active Bets!
+                          </div>
+
+                        <!-- Bets table -->
+                        <table id="activeBets" class="display">
+                            <thead>
+                                <tr>
+                                    <th>Player</th>
+                                    <th>Amount Wagered</th>
+                                    <th>Horse</th>
+                                    <th>Odds</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+
+                    <div class="ui top attached error message">
+                        FYI - I'm actively developing this site, so it might be messed up in spots.
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </body>
+<script>      
+    var baseURL = "https://6g125mlu01.execute-api.us-east-1.amazonaws.com/prod";
+
+
+    $(document).ready(function () {
+        $(document).ready(function () {
+            // Initialize DataTables plugin
+            $('#activeBets').DataTable(
+                {
+                    "ajax": {
+                        "url": baseURL + "/bets",
+                        "dataSrc": ""
+                    },
+                    "columns": [
+                        { "data": "player_id" },
+                        { "data": "amount_wagered" },
+                        { "data": "horse_id" },
+                        { "data": "odds" }
+                    ]
+                }
+            );
+        });
+    });
+
+    $('.ui.modal')
+    .modal({
+        blurring: true,
+        onDeny: function () {
+            // window.alert('What the heck.');
+        },
+        onApprove: function () {
+            var validated = $('.ui.form').form('validate form');
+            if(!validated){
+                return false;
+                // window.alert('Not chill.')
+            }
+        }
+    })
+    ;
+
+    $('.ui.dropdown')
+        .dropdown();
+
+    $('.ui.sticky')
+    .sticky({
+        context: '#mainGrid'
+    })
+    ;
+
+    $('#homeButton').click(function() {
+        window.location.href = "./index.html";
+    });
+
+
+    $('#registerButton').click(function() {
+        $('#rsvpModal').modal('show');
+    });
+
+    $('#newBetButton').click(function() {
+        $('#newBetModal').modal('show');
+    });
+    
+
+    $('#refreshAttendees').click(function() {
+        $(".icon.refresh").addClass("loading");
+        updateAttendees();
+        return new Promise(resolve => {
+            setTimeout(() => {
+                $(".icon.refresh").removeClass("loading");
+                resolve();
+            }, 1000);
+        });
+    })
+    $('.message .close')
+    .on('click', function() {
+        $(this)
+        .closest('.message')
+        .transition('fade')
+        ;
+    })
+    ;
+
+    $(document).ready(function() {
+        updateAttendees();
+    });
+
+    $('.ui.form.register')
+    .form({
+        fields: {
+            fNameField     : 'empty',
+            lNameField   : 'empty',
+            agame    : 'checked'
+        }
+    })
+    ;
+
+    function updateAttendees() {
+        $.get(baseURL+'/races', function(data) {
+            if (data) {
+                data = $.parseJSON(data);
+                console.log(data);
+                $('#horses').empty();
+                $('#numberOfAttendees').html('Total Races:<div class="ui blue inverted label">'+data.length+'</div>');
+                for (var horse in data) {
+                    $('#horses').append(
+                        '<div class="item">' +
+                        '<div class="middle aligned content">' +
+                        '<div class="ui grid">' +
+                        '<div class="ui eight wide column">' +
+                        '<div class="header">' + data[horse].horse_id + '</div>' +
+                        '<div class="description">' + data[horse].race_name +
+                        '</div>' +
+                        '</div>' +
+                        '<div class="ui eight wide column">' +
+                        '<div class="ui large green icon button placeBetButton"><i class="icon coins"></i>' + data[horse].odds + '<div class="ui description">PLACE BET</div></div>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>');
+                }
+
+                $('.ui.large.green.icon.button.placeBetButton').click(function() {
+                    
+                    var horse_id = $(this).parent().parent().parent().parent().find('.header').html();
+                    var horse_odds = $(this).html();
+                    $('.horseOdds').html(horse_odds);
+                    $('#horseIDField').val(horse_id);
+                    $('#amountWageredField').val('100');
+                    $('#placeBetModal').modal('show');
+                });
+            }
+        })
+    }
+
+    function placeBet(horse_id, player_id, amount_wagered) {
+    const url = baseURL+'/bets';
+    const data = {
+        horse_id: horse_id,
+        player_id: player_id,
+        amount_wagered: amount_wagered
+    };
+    const options = {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data),
+        mode: 'no-cors'
+    };
+    fetch(url, options)
+        .then(response => {
+        console.log('Response:', response);
+        $('.ui.modal').modal('hide');
+        $('body').toast({
+                        position: 'top attached',
+                        title: 'Bet Placed',
+                        class: 'green',
+                        message: 'I think this worked but I couldn\'t figure out how to make sure. Check the bets below...'
+                    });
+        })
+        .catch(error => {
+        console.error('Error placing bet:', error);
+        });
+    }
+
+
+
+    $('#submitBet').click(function() {
+        var horse_id = $('#horseIDField').val();
+        var player_id = $('#playerIDField').val();
+
+        var amount_wagered = parseInt($('#amountWageredField').val());
+        placeBet(horse_id, player_id, amount_wagered);
+    });
+
+</script>
+
+</html>
