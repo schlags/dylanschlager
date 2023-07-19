@@ -223,15 +223,52 @@ ul {
 
 .fishThing {
   animation-name: spin;
-  animation-duration: 1000ms;
-  animation-iteration-count: infinite;
+  animation-duration: 3000ms;
   animation-timing-function: linear; 
+  animation-fill-mode: forwards;
 }
+
+.tooSlow {
+	animation-name: slowReveal;
+	animation-duration: 6000ms;
+	animation-timing-function: linear;
+	animation-fill-mode: forwards;
+}
+
+.quickSpin {
+	animation-name: quickSpin;
+	animation-duration: 500ms;
+	animation-timing-function: linear;
+	animation-fill-mode: forwards;
+}
+
 @keyframes spin {
   from {
       transform:rotate(0deg);
+	  opacity: 1;
   }
   to {
-      transform:rotate(360deg);
+      transform:rotate(1000deg);
+	  opacity: 0;
+  }
+}
+
+@keyframes slowReveal {
+  from {
+	  transform:rotate(90deg);
+	  opacity: 0;
+  }
+  to {
+	  transform:rotate(0deg);
+	  opacity: 1;
+  }
+}
+
+@keyframes quickSpin {
+  from {
+	  transform:rotate(0deg);
+  }
+  to {
+	  transform:rotate(360deg);
   }
 }
